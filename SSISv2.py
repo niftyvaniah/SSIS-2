@@ -174,33 +174,41 @@ class Course(tk.Frame):
             Course_Code.set('')
             Course_Name.set('') 
 
-        #LAY-OUT
+        #Frames
+
+        ManageFrame=Frame(self, relief =RIDGE, bg="#4A6274")
+        ManageFrame.place(x=30, y=130,width=530, height=500)
+        
+        DisplayFrame=Frame(self, relief =RIDGE, bg="#4A6274")
+        DisplayFrame.place(x=580, y=130,width=730, height=500)
+
+        
         #Label and Entry
         
-        self.lblCourseCode = Label(self, font=("Palatino Linotype",13,"bold"),fg="#4A6274", text="COURSE CODE:*", padx=5, pady=5)
-        self.lblCourseCode.place(x=100,y=260)
-        self.txtCourseCode = Entry(self, font=("Poppins", 13), textvariable=Course_Code, width=35)
-        self.txtCourseCode.place(x=250,y=265)
+        self.lblCourseCode = Label(ManageFrame, font=("Palatino Linotype",15,"bold"),fg="snow", bg="#4A6274", text="COURSE CODE:", padx=5, pady=5)
+        self.lblCourseCode.place(x=10,y=126)
+        self.txtCourseCode = Entry(ManageFrame, font=("Poppins", 13), textvariable=Course_Code, width=37)
+        self.txtCourseCode.place(x=180,y=132)
         
 
-        self.lblCourseName = Label(self, font=("Palatino Linotype",13,"bold"),fg="#4A6274", text="COURSE NAME:*", padx=5, pady=5)
-        self.lblCourseName.place(x=100,y=300)
-        self.txtCourseName = Entry(self, font=("Poppins", 13), textvariable=Course_Name, width=35)
-        self.txtCourseName.place(x=250,y=305)
+        self.lblCourseName = Label(ManageFrame, font=("Palatino Linotype",15,"bold"),fg="snow", bg="#4A6274", text="COURSE NAME:", padx=5, pady=5)
+        self.lblCourseName.place(x=10,y=160)
+        self.txtCourseName = Entry(ManageFrame, font=("Poppins", 13), textvariable=Course_Name, width=37)
+        self.txtCourseName.place(x=180,y=166)
         
-        self.Search =  Label(self, font=("Palatino Linotype",12,"bold"),fg="#4A6274", text="Search by Course Code", padx=5, pady=5)
-        self.Search.place(x=585, y= 165)
-        self.SearchBar = Entry(self, font=("Palatino Linotype",12), textvariable=SearchBar_Var, width=29)
-        self.SearchBar.place(x=776,y=170)
+        self.Search =  Label(DisplayFrame, font=("Palatino Linotype",13,"bold"),fg="snow", bg="#4A6274", text="Search by Course Code", padx=5, pady=5)
+        self.Search.place(x=15, y= 40)
+        self.SearchBar = Entry(DisplayFrame, font=("Poppins",12), textvariable=SearchBar_Var, width=25)
+        self.SearchBar.place(x=220,y=45)
         self.SearchBar.insert(0,'Course Code')
         
 
         ## Treeview
         
-        scrollbar = Scrollbar(self, orient=VERTICAL)
-        scrollbar.place(x=1225,y=255,height=350)
+        scrollbar = Scrollbar(DisplayFrame, orient=VERTICAL)
+        scrollbar.place(x=670,y=120,height=350)
 
-        treecourse = ttk.Treeview(self,
+        treecourse = ttk.Treeview(DisplayFrame,
                                         columns=("Course Code","Course Name"),
                                         height = 16,
                                         yscrollcommand=scrollbar.set)
@@ -213,38 +221,38 @@ class Course(tk.Frame):
         treecourse.column("Course Name", width=430, stretch=False)
 
 
-        treecourse.place(x=585,y=255)
+        treecourse.place(x=30,y=120)
         scrollbar.config(command=treecourse.yview)
             
         ## Buttons
 
-        self.btnAddID = Button(self, text="Add", font=('Palatino Linotype', 10), height=1, width=10,
-                                bg="#4A6274", fg="snow", command=addCourse)
-        self.btnAddID.place(x=460,y=490)
+        self.btnAddID = Button(ManageFrame, text="Add", font=('Poppins', 10, "bold"), height=1, width=10,
+                                bg="#DFE6E9", fg="#4A6274", command=addCourse)
+        self.btnAddID.place(x=400,y=280)
         
-        self.btnUpdate = Button(self, text="Update", font=('Palatino Linotype', 10), height=1, width=10,
-                                bg="#4A6274", fg="snow", command=updateCourse) 
-        self.btnUpdate.place(x=460,y=530)
+        self.btnUpdate = Button(ManageFrame, text="Update", font=('Poppins', 10, "bold"), height=1, width=10,
+                                bg="#DFE6E9", fg="#4A6274", command=updateCourse) 
+        self.btnUpdate.place(x=400,y=320)
         
-        self.btnClear = Button(self, text="Clear", font=('Palatino Linotype', 10), height=1, width=10,
-                                bg="#4A6274", fg="snow", command=clear)
-        self.btnClear.place(x=460,y=570)
+        self.btnClear = Button(ManageFrame, text="Clear", font=('Poppins', 10,"bold"), height=1, width=10,
+                                bg="#DFE6E9", fg="#4A6274", command=clear)
+        self.btnClear.place(x=400,y=360)
         
-        self.btnDelete = Button(self, text="Delete", font=('Palatino Linotype', 10), height=1, width=10,
-                                bg="#4A6274", fg="snow", command=deleteCourse)
-        self.btnDelete.place(x=1120,y=210)
+        self.btnDelete = Button(DisplayFrame, text="Delete", font=('Poppins', 10, "bold"), height=1, width=10,
+                                bg="#DFE6E9", fg="#4A6274", command=deleteCourse)
+        self.btnDelete.place(x=600,y=80)
         
-        self.btnSelect = Button(self, text="Select", font=('Palatino Linotype', 10), height=1, width=10,
-                              bg="#4A6274", fg="snow", command=editCourse)
-        self.btnSelect.place(x=1020,y=210)
+        self.btnSelect = Button(DisplayFrame, text="Select", font=('Poppins', 10, "bold"), height=1, width=10,
+                              bg="#DFE6E9", fg="#4A6274", command=editCourse)
+        self.btnSelect.place(x=500,y=80)
         
-        self.btnSearch = Button(self, text="Search", font=('Palatino Linotype', 10), height=1, width=10,
-                                bg="#4A6274", fg="snow", command=searchCourse)
-        self.btnSearch.place(x=1020,y=170)
+        self.btnSearch = Button(DisplayFrame, text="Search", font=('Poppins', 10, "bold"), height=1, width=10,
+                               bg="#DFE6E9", fg="#4A6274", command=searchCourse)
+        self.btnSearch.place(x=500,y=40)
         
-        self.btnRefresh = Button(self, text="Show All", font=('Palatino Linotype', 10), height=1, width=10,
-                              bg="#4A6274", fg="snow", command=Refresh)
-        self.btnRefresh.place(x=1120,y=170)
+        self.btnRefresh = Button(DisplayFrame, text="Show All", font=('Poppins', 10, "bold"), height=1, width=10,
+                              bg="#DFE6E9", fg="#4A6274", command=Refresh)
+        self.btnRefresh.place(x=600,y=40)
         
         connectCourse()
         displayCourse()
@@ -396,7 +404,7 @@ class Student(tk.Frame):
                 cur .execute("PRAGMA foreign_keys = ON")
                 cur.execute("SELECT * FROM studentdatabase WHERE StudentID = ?",(StudentID,))
                 con.commit()
-                tree.delete(*self.studentlist.get_children())
+                tree.delete(*tree.get_children())
                 rows = cur.fetchall()
                 for row in rows:
                     tree.insert("", tk.END, text=row[0], values=row[0:])
@@ -441,66 +449,72 @@ class Student(tk.Frame):
             Course_Code.set('')
             Yearlevel.set('')
             Gender.set('')
+
+        ManageFrame=Frame(self, relief =RIDGE, bg="#4A6274")
+        ManageFrame.place(x=30, y=130,width=530, height=500)
+        
+        DisplayFrame=Frame(self, relief =RIDGE, bg="#4A6274")
+        DisplayFrame.place(x=580, y=130,width=750, height=500)
             
         ## Label and Entry
         
-        self.StudentID = Label(self, font=("Palatino Linotype",14,"bold"),fg="#4A6274", text="STUDENT ID:", padx=5, pady=5)
-        self.StudentID.place(x=85,y=170)
-        self.StudentIDEntry = Entry(self, font=("Poppins", 13), textvariable=StudentID, width=33)
-        self.StudentIDEntry.place(x=260,y=176)
+        self.StudentID = Label(ManageFrame, font=("Palatino Linotype",14,"bold"),fg="snow", bg="#4A6274", text="STUDENT ID:", padx=5, pady=5)
+        self.StudentID.place(x=20,y=30)
+        self.StudentIDEntry = Entry(ManageFrame, font=("Poppins", 13), textvariable=StudentID, width=35)
+        self.StudentIDEntry.place(x=200,y=36)
         self.StudentIDEntry.insert(0,'YYYY-NNNN')
         
 
-        self.Firstname = Label(self, font=("Palatino Linotype",14,"bold"),fg="#4A6274", text="FIRST NAME:", padx=5, pady=5)
-        self.Firstname.place(x=80,y=210)
-        self.FirstnameEntry = Entry(self, font=("Poppins", 13), textvariable=Firstname, width=33)
-        self.FirstnameEntry.place(x=260,y=216)
+        self.Firstname = Label(ManageFrame, font=("Palatino Linotype",14,"bold"),fg="snow", bg="#4A6274", text="FIRST NAME:", padx=5, pady=5)
+        self.Firstname.place(x=20,y=70)
+        self.FirstnameEntry = Entry(ManageFrame, font=("Poppins", 13), textvariable=Firstname, width=35)
+        self.FirstnameEntry.place(x=200,y=76)
 
-        self.Midname = Label(self, font=("Palatino Linotype",14,"bold"),fg="#4A6274", text="MIDDLE INITIAL:", padx=5, pady=5)
-        self.Midname.place(x=80,y=250)
-        self.MidnameEntry = Entry(self, font=("Poppins", 13), textvariable=Midname, width=33)
-        self.MidnameEntry.place(x=260,y=256)
+        self.Midname = Label(ManageFrame, font=("Palatino Linotype",14,"bold"),fg="snow", bg="#4A6274", text="MIDDLE INITIAL:", padx=5, pady=5)
+        self.Midname.place(x=20,y=110)
+        self.MidnameEntry = Entry(ManageFrame, font=("Poppins", 13), textvariable=Midname, width=35)
+        self.MidnameEntry.place(x=200,y=116)
 
-        self.Surname = Label(self, font=("Palatino Linotype",14,"bold"), fg="#4A6274",text="SURNAME:", padx=5, pady=5)
-        self.Surname.place(x=80,y=290)
-        self.SurnameEntry = Entry(self, font=("Poppins", 13), textvariable=Surname, width=33)
-        self.SurnameEntry.place(x=260,y=296)
+        self.Surname = Label(ManageFrame, font=("Palatino Linotype",14,"bold"),fg="snow", bg="#4A6274",text="SURNAME:", padx=5, pady=5)
+        self.Surname.place(x=20,y=150)
+        self.SurnameEntry = Entry(ManageFrame, font=("Poppins", 13), textvariable=Surname, width=35)
+        self.SurnameEntry.place(x=200,y=156)
 
-        self.Course = Label(self, font=("Palatino Linotype",14,"bold"), fg="#4A6274",text="COURSE:", padx=5, pady=5)
-        self.Course.place(x=80,y=330)
-        self.CourseEntry = Entry(self, font=("Poppins", 13), textvariable=Course_Code, width=33)
-        self.CourseEntry.place(x=260,y=336)
+        self.Course = Label(ManageFrame, font=("Palatino Linotype",14,"bold"), fg="snow", bg="#4A6274",text="COURSE:", padx=5, pady=5)
+        self.Course.place(x=20,y=190)
+        self.CourseEntry = Entry(ManageFrame, font=("Poppins", 13), textvariable=Course_Code, width=35)
+        self.CourseEntry.place(x=200,y=196)
         
 
-        self.StudentYearLevel = Label(self, font=("Palatino Linotype",14,"bold"),fg="#4A6274", text="YEAR LEVEL:", padx=5, pady=5)
-        self.StudentYearLevel.place(x=80,y=370)
-        self.StudentYearLevelEntry = ttk.Combobox(self,
+        self.StudentYearLevel = Label(ManageFrame, font=("Palatino Linotype",14,"bold"),fg="snow", bg="#4A6274", text="YEAR LEVEL:", padx=5, pady=5)
+        self.StudentYearLevel.place(x=20,y=230)
+        self.StudentYearLevelEntry = ttk.Combobox(ManageFrame,
                                                 value=["1st Year", "2nd Year", "3rd Year", "4th Year", "5th Year"],
                                                 state="readonly", font=("Poppins", 13), textvariable=Yearlevel,
-                                                width=31)
-        self.StudentYearLevelEntry.place(x=260,y=376)
+                                                width=33)
+        self.StudentYearLevelEntry.place(x=200,y=236)
         
 
-        self.Gender = Label(self, font=("Palatino Linotype",14,"bold"),fg="#4A6274", text="GENDER:", padx=5, pady=5)
-        self.Gender.place(x=80,y=410)
-        self.GenderEntry = ttk.Combobox(self, value=["Male", "Female"], font=("Poppins", 13),
-                                             state="readonly", textvariable=Gender, width=31)
-        self.GenderEntry.place(x=260,y=416)
+        self.Gender = Label(ManageFrame, font=("Palatino Linotype",14,"bold"),fg="snow", bg="#4A6274", text="GENDER:", padx=5, pady=5)
+        self.Gender.place(x=20,y=270)
+        self.GenderEntry = ttk.Combobox(ManageFrame, value=["Male", "Female"], font=("Poppins", 13),
+                                             state="readonly", textvariable=Gender, width=33)
+        self.GenderEntry.place(x=200,y=276)
 
-        self.Search =  Label(self, font=("Palatino Linotype",13,"bold"),fg="#4A6274", text="Search by ID Number", padx=5, pady=5)
-        self.Search.place(x=585, y= 165)
-        self.SearchBar = Entry(self, font=("Palatino Linotype",12), textvariable=Searchbar, width=29)
-        self.SearchBar.place(x=776,y=170)
+        self.Search =  Label(DisplayFrame, font=("Palatino Linotype",13,"bold"),fg="snow", bg="#4A6274", text="Search by ID Number", padx=5, pady=5)
+        self.Search.place(x=15, y= 40)
+        self.SearchBar = Entry(DisplayFrame, font=("Palatino Linotype",12), textvariable=Searchbar, width=29)
+        self.SearchBar.place(x=220,y=45)
         self.SearchBar.insert(0,'YYYY-NNNN')
        
         
 
         ## Treeview
         
-        scrollbar = Scrollbar(self, orient=VERTICAL)
-        scrollbar.place(x=1255,y=255,height=350)
+        scrollbar = Scrollbar(DisplayFrame, orient=VERTICAL)
+        scrollbar.place(x=700,y=120,height=350)
 
-        tree = ttk.Treeview(self,
+        tree = ttk.Treeview(DisplayFrame,
                             columns=("ID Number", "First Name","Mid Initial","Surname", "Course", "Year Level", "Gender"),
                             height = 16,
                             yscrollcommand=scrollbar.set)
@@ -522,43 +536,43 @@ class Student(tk.Frame):
         tree.column("Year Level", width=100, anchor=W, stretch=False)
         tree.column("Gender", width=100, anchor=W, stretch=False)
 
-        tree.place(x=585,y=255)
+        tree.place(x=30,y=120)
         scrollbar.config(command=tree.yview)
         
         ## Buttons
         
-        btnAddID = Button(self, text="Add", font=('Poppins', 11), height=1, width=10,
-                             bg="#4A6274", fg="snow", command=addData)
-        btnAddID.place(x=460,y=490)
+        btnAddID = Button(ManageFrame, text="Add", font=('Poppins', 11, "bold"), height=1, width=10,
+                             bg="#DFE6E9", fg="#4A6274", command=addData)
+        btnAddID.place(x=400,y=320)
         btnAddID.config(cursor= "hand2")
         
-        btnUpdate = Button(self, text="Update", font=('Poppins', 11), height=1, width=10,
-                             bg="#4A6274", fg="snow", command=updateData)
-        btnUpdate.place(x=460,y=530)
+        btnUpdate = Button(ManageFrame, text="Update", font=('Poppins', 11, "bold"), height=1, width=10,
+                             bg="#DFE6E9", fg="#4A6274", command=updateData)
+        btnUpdate.place(x=400,y=360)
         btnUpdate.config(cursor= "hand2")
         
-        btnClear = Button(self, text="Clear", font=('Poppins', 11), height=1, width=10,
-                             bg="#4A6274", fg="snow", command=clear)
-        btnClear.place(x=460,y=570)
+        btnClear = Button(ManageFrame, text="Clear", font=('Poppins', 11, "bold"), height=1, width=10,
+                             bg="#DFE6E9", fg="#4A6274", command=clear)
+        btnClear.place(x=400,y=400)
         btnClear.config(cursor= "hand2")
         
-        btnDelete = Button(self, text="Delete", font=('Poppins', 10), height=1, width=10,
-                             bg="#4A6274", fg="snow", command=deleteData)
-        btnDelete.place(x=1120,y=210)
+        btnDelete = Button(DisplayFrame, text="Delete", font=('Poppins', 10, "bold"), height=1, width=10,
+                             bg="#DFE6E9", fg="#4A6274", command=deleteData)
+        btnDelete.place(x=600,y=80)
         btnDelete.config(cursor= "hand2")
         
-        btnSelect = Button(self, text="Select", font=('Poppins', 10), height=1, width=10,
-                             bg="#4A6274", fg="snow", command=editData)
+        btnSelect = Button(DisplayFrame, text="Select", font=('Poppins', 10,"bold"), height=1, width=10,
+                             bg="#DFE6E9", fg="#4A6274", command=editData)
         btnSelect.config(cursor= "hand2")
-        btnSelect.place(x=1020,y=210)
+        btnSelect.place(x=500,y=80)
         
-        btnSearch = Button(self, text="Search", font=('Poppins', 10), height=1, width=10,
-                                bg="#4A6274", fg="snow", command=searchData)
-        btnSearch.place(x=1020,y=170)
+        btnSearch = Button(DisplayFrame, text="Search", font=('Poppins', 10,"bold"), height=1, width=10,
+                                bg="#DFE6E9", fg="#4A6274", command=searchData)
+        btnSearch.place(x=500,y=40)
         
-        btnDisplay = Button(self, text="Show All", font=('Poppins', 10), height=1, width=10,
-                             bg="#4A6274", fg="snow", command=Refresh)
-        btnDisplay.place(x=1120,y=170)
+        btnDisplay = Button(DisplayFrame, text="Show All", font=('Poppins', 10,"bold"), height=1, width=10,
+                             bg="#DFE6E9", fg="#4A6274", command=Refresh)
+        btnDisplay.place(x=600,y=40)
         btnDisplay.config(cursor= "hand2")
         connect()
         displayData()
