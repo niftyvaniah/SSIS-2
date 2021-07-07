@@ -7,7 +7,7 @@ import sqlite3
 
 
 
-class SIS(tk.Tk):
+class SSIS(tk.Tk):
 
     def __init__(self, *args, **kwargs):
         
@@ -21,7 +21,7 @@ class SIS(tk.Tk):
 
         self.frames = {}
 
-        for F in (Student, Course):
+        for F in (Course, Student):
 
             frame = F(container, self)
 
@@ -29,7 +29,7 @@ class SIS(tk.Tk):
 
             frame.grid(row=0, column=0, sticky="nsew")
 
-        self.show_frame(Student)
+        self.show_frame(Course)
 
     def show_frame(self, page_number):
 
@@ -74,40 +74,40 @@ class Course(tk.Frame):
         Studbutton.place(x=100,y=75)
         Studbutton.config(cursor= "hand2")
 
-        Course_Code = StringVar()
-        Course_Name = StringVar()
-        SearchBar_Var = StringVar()
+        CourseCode = StringVar()
+        CourseName = StringVar()
+        SearchBarVar = StringVar()
 
         #FUNCTIONS
         def connectCourse():
-            conn = sqlite3.connect("StudentDatabase.db")
+            conn = sqlite3.connect("Student.db")
             cur = conn.cursor()
             cur.execute("PRAGMA foreign_keys = ON")
-            cur.execute("CREATE TABLE IF NOT EXISTS courses (Course_Code TEXT PRIMARY KEY, Course_Name TEXT)") 
+            cur.execute("CREATE TABLE IF NOT EXISTS courses (CourseCode TEXT PRIMARY KEY, CourseName TEXT)") 
             conn.commit() 
             conn.close()
             
         def addCourse():
-            if Course_Code.get()=="" or Course_Name.get()=="": 
-                tkinter.messagebox.showinfo("SSIS", "Please fill up the Box correctly")
+            if CourseCode.get()=="" or CourseName.get()=="": 
+                tkinter.messagebox.showinfo("Student Information System", "Please fill up the Box correctly")
             else:
-                conn = sqlite3.connect("StudentDatabase.db")
+                conn = sqlite3.connect("Student.db")
                 c = conn.cursor()         
                 #Insert Table
-                c.execute("INSERT INTO courses(Course_Code,Course_Name) VALUES (?,?)",\
-                          (Course_Code.get(),Course_Name.get()))        
+                c.execute("INSERT INTO courses(CourseCode,CourseName) VALUES (?,?)",\
+                          (CourseCode.get(),CourseName.get()))        
                 conn.commit()           
                 conn.close()
-                Course_Code.set('')
-                Course_Name.set('') 
-                tkinter.messagebox.showinfo("SSIS", "Course Recorded Successfully")
+                CourseCode.set('')
+                CourseName.set('') 
+                tkinter.messagebox.showinfo("Student Information System", "Course Recorded Successfully")
                 displayCourse()
                 
                 
               
         def displayCourse():
             treecourse.delete(*treecourse.get_children())
-            conn = sqlite3.connect("StudentDatabase.db")
+            conn = sqlite3.connect("Student.db")
             cur = conn.cursor()
             cur.execute("SELECT * FROM courses")
             rows = cur.fetchall()
@@ -117,48 +117,49 @@ class Course(tk.Frame):
         
         def updateCourse():
             for selected in treecourse.selection():
-                conn = sqlite3.connect("StudentDatabase.db")
+                conn = sqlite3.connect("Student.db")
                 cur = conn.cursor()
                 cur.execute("PRAGMA foreign_keys = ON")
-                cur.execute("UPDATE courses SET Course_Code=?, Course_Name=? WHERE Course_Code=?", \
-                            (Course_Code.get(),Course_Name.get(), treecourse.set(selected, '#1')))                       
+                cur.execute("UPDATE courses SET CourseCode=?, CourseName=? WHERE CourseCode=?", \
+                            (CourseCode.get(),CourseName.get(), treecourse.set(selected, '#1')))                       
                 conn.commit()
-                tkinter.messagebox.showinfo("SSIS", "Course Updated Successfully")
+                tkinter.messagebox.showinfo("Student Information System", "Course Updated Successfully")
                 displayCourse()
                 conn.close()
                 
         def editCourse():
             x = treecourse.focus()
             if x == "":
-                tkinter.messagebox.showerror("SSIS", "Please select a record from the table.")
+                tkinter.messagebox.showerror("Student Information System", "Please select a record from the table.")
                 return
             values = treecourse.item(x, "values")
-            Course_Code.set(values[0])
-            Course_Name.set(values[1])
+            CourseCode.set(values[0])
+            CourseName.set(values[1])
                     
         def deleteCourse(): 
             try:
-                messageDelete = tkinter.messagebox.askyesno("SSIS", "Do you want to permanently delete this record?")
+                messageDelete = tkinter.messagebox.askyesno("Student Information System", "Do you want to permanently delete this record?")
                 if messageDelete > 0:   
-                    con = sqlite3.connect("StudentDatabase.db")
+                    con = sqlite3.connect("Student.db")
                     cur = con.cursor()
                     x = treecourse.selection()[0]
                     id_no = treecourse.item(x)["values"][0]
                     cur.execute("PRAGMA foreign_keys = ON")
-                    cur.execute("DELETE FROM courses WHERE Course_Code = ?",(id_no,))                   
+                    cur.execute("DELETE FROM courses WHERE CourseCode = ?",(id_no,))                   
                     con.commit()
+
                     treecourse.delete(x)
-                    tkinter.messagebox.showinfo("SSIS", "Course Deleted Successfully")
+                    tkinter.messagebox.showinfo("Student Information System", "Course Deleted Successfully")
                     displayCourse()
                     con.close()                    
             except:
-                tkinter.messagebox.showerror("SSIS", "Students are still enrolled in this course")
+                tkinter.messagebox.showerror("Student Information System", "Students are still enrolled in this course")
                 
         def searchCourse():
-            Course_Code = SearchBar_Var.get()                
-            con = sqlite3.connect("StudentDatabase.db")
+            CourseCode = SearchBarVar.get()                
+            con = sqlite3.connect("Student.db")
             cur = con.cursor()
-            cur.execute("SELECT * FROM courses WHERE Course_Code = ?",(Course_Code,))
+            cur.execute("SELECT * FROM courses WHERE CourseCode = ?",(CourseCode,))
             con.commit()
             treecourse.delete(*treecourse.get_children())
             rows = cur.fetchall()
@@ -171,8 +172,8 @@ class Course(tk.Frame):
             displayCourse()
         
         def clear():
-            Course_Code.set('')
-            Course_Name.set('') 
+            CourseCode.set('')
+            CourseName.set('') 
 
         #Frames
 
@@ -187,18 +188,18 @@ class Course(tk.Frame):
         
         self.lblCourseCode = Label(ManageFrame, font=("Palatino Linotype",15,"bold"),fg="snow", bg="#4A6274", text="COURSE CODE:", padx=5, pady=5)
         self.lblCourseCode.place(x=10,y=126)
-        self.txtCourseCode = Entry(ManageFrame, font=("Poppins", 13), textvariable=Course_Code, width=37)
+        self.txtCourseCode = Entry(ManageFrame, font=("Poppins", 13), textvariable=CourseCode, width=37)
         self.txtCourseCode.place(x=180,y=132)
         
 
         self.lblCourseName = Label(ManageFrame, font=("Palatino Linotype",15,"bold"),fg="snow", bg="#4A6274", text="COURSE NAME:", padx=5, pady=5)
         self.lblCourseName.place(x=10,y=160)
-        self.txtCourseName = Entry(ManageFrame, font=("Poppins", 13), textvariable=Course_Name, width=37)
+        self.txtCourseName = Entry(ManageFrame, font=("Poppins", 13), textvariable=CourseName, width=37)
         self.txtCourseName.place(x=180,y=166)
         
         self.Search =  Label(DisplayFrame, font=("Palatino Linotype",13,"bold"),fg="snow", bg="#4A6274", text="Search by Course Code", padx=5, pady=5)
         self.Search.place(x=15, y= 40)
-        self.SearchBar = Entry(DisplayFrame, font=("Poppins",12), textvariable=SearchBar_Var, width=25)
+        self.SearchBar = Entry(DisplayFrame, font=("Poppins",12), textvariable=SearchBarVar, width=25)
         self.SearchBar.place(x=220,y=45)
         self.SearchBar.insert(0,'Course Code')
         
@@ -301,23 +302,23 @@ class Student(tk.Frame):
         Yearlevel = StringVar()
         Gender = StringVar()
         Searchbar=StringVar()
-        Course_Code = StringVar()
+        CourseCode = StringVar()
         
 
         def connect():
-            conn = sqlite3.connect("StudentDatabase.db")
+            conn = sqlite3.connect("Student.db")
             cur = conn.cursor()
             cur.execute("PRAGMA foreign_keys = ON")
-            cur.execute("CREATE TABLE IF NOT EXISTS studentdatabase (StudentID  TEXT PRIMARY KEY, Firstname TEXT,\
-                        Midname TEXT, Surname TEXT, Course_Code TEXT,\
+            cur.execute("CREATE TABLE IF NOT EXISTS student (StudentID  TEXT PRIMARY KEY, Firstname TEXT,\
+                        Midname TEXT, Surname TEXT, CourseCode TEXT,\
                         Yearlevel TEXT, Gender TEXT,\
-                        FOREIGN KEY(Course_Code) REFERENCES courses(Course_Code) ON UPDATE CASCADE)") 
+                        FOREIGN KEY(CourseCode) REFERENCES courses(CourseCode) ON UPDATE CASCADE)") 
             conn.commit() 
             conn.close()    
         
         def addData():
-            if StudentID.get() == "" or Firstname.get() == "" or Surname.get() == "" or Course_Code.get() == "" or Yearlevel.get() == "" or Gender.get() == "": 
-                tkinter.messagebox.showinfo("SSIS", "Please fill up the Box correctly")
+            if StudentID.get() == "" or Firstname.get() == "" or Surname.get() == "" or CourseCode.get() == "" or Yearlevel.get() == "" or Gender.get() == "": 
+                tkinter.messagebox.showinfo("Student Information System", "Please fill up the Box correctly")
             else:  
                 ID = StudentID.get()
                 ID_list = []
@@ -327,70 +328,71 @@ class Student(tk.Frame):
                 if len(a[0]) == 4:        
                     if "-" in ID_list:
                         if len(a[1]) == 1:
-                            tkinter.messagebox.showerror("SSIS", "ID is invalid\nIt should be in YYYY-NNNN")
+                            tkinter.messagebox.showerror("Student Information System", "ID is invalid\nIt should be in YYYY-NNNN")
                         elif len(a[1]) ==2:
-                            tkinter.messagebox.showerror("SSIS", "ID is invalid\nIt should be in YYYY-NNNN")
+                            tkinter.messagebox.showerror("Student Information System", "ID is invalid\nIt should be in YYYY-NNNN")
                         elif len(a[1]) ==3:
-                            tkinter.messagebox.showerror("SSIS", "ID is invalid\nIt should be in YYYY-NNNN")
+                            tkinter.messagebox.showerror("Student Information System", "ID is invalid\nIt should be in YYYY-NNNN")
                         else:
                             x = ID.split("-")  
                             year = x[0]
                             number = x[1]
                             if year.isdigit()==False or number.isdigit()==False:
                                 try:
-                                    tkinter.messagebox.showerror("SSIS", "ID is invalid")
+                                    tkinter.messagebox.showerror("Student Information System", "ID is invalid")
                                 except:
                                     pass
                             elif year==" " or number==" ":
                                 try:
-                                    tkinter.messagebox.showerror("SSIS", "ID is Invalid")
+                                    tkinter.messagebox.showerror("Student Information System", "ID is Invalid")
                                 except:
                                     pass
                             else:
-                                try:
-                                    conn = sqlite3.connect("StudentDatabase.db")
-                                    c = conn.cursor() 
-                                    c.execute("PRAGMA foreign_keys = ON")                                                                                                              
-                                    c.execute("INSERT INTO studentdatabase(StudentID,Firstname,Midname,Surname,Course_Code,Yearlevel,Gender) VALUES (?,?,?,?,?,?,?)",\
-                                              (StudentID.get(),Firstname.get(),Midname.get(),Surname.get(),Course_Code.get(),Yearlevel.get(),Gender.get()))                                      
+                                #try:
+                                conn = sqlite3.connect("Student.db")
+                                c = conn.cursor() 
+                                c.execute("PRAGMA foreign_keys = ON")                                                                                                              
+                                c.execute("INSERT INTO student(StudentID,Firstname,Midname,Surname,CourseCode,Yearlevel,Gender) VALUES (?,?,?,?,?,?,?)",\
+                                              (StudentID.get(),Firstname.get(),Midname.get(),Surname.get(),CourseCode.get(),Yearlevel.get(),Gender.get()))                                      
                                                                        
-                                    tkinter.messagebox.showinfo("SSIS", "Student Recorded")
-                                    conn.commit() 
-                                    clear()
-                                    displayData()
-                                    conn.close()
-                                except:
-                                    tkinter.messagebox.showerror("SSIS", "Course Unavailable")
+                                tkinter.messagebox.showinfo("Student Information System", "Student Recorded")
+                                conn.commit() 
+                                clear()
+                                displayData()
+                                conn.close()
+                                #except:
+                                    #
+                                    #tkinter.messagebox.showerror("Student Information System", "ID is Invalid")
                     else:
-                        tkinter.messagebox.showerror("SSIS", "ID is invalid")
+                        tkinter.messagebox.showerror("Student Information System", "ID is invalid")
                 else:
-                    tkinter.messagebox.showerror("SSIS", "ID is Invalid")
+                    tkinter.messagebox.showerror("Student Information System", "ID is Invalid")
                  
         def updateData():
             for selected in tree.selection():
-                conn = sqlite3.connect("StudentDatabase.db")
+                conn = sqlite3.connect("Student.db")
                 cur = conn.cursor()
                 cur.execute("PRAGMA foreign_keys = ON")
-                cur.execute("UPDATE studentdatabase SET StudentID=?, Firstname=?, Midname=?,Surname=?,Course_Code=?, Yearlevel=?,Gender=?\
-                      WHERE StudentID=?", ((StudentID.get(),Firstname.get(),Midname.get(),Surname.get(),Course_Code.get(),Yearlevel.get(),Gender.get(),\
+                cur.execute("UPDATE student SET StudentID=?, Firstname=?, Midname=?,Surname=?,CourseCode=?, Yearlevel=?,Gender=?\
+                      WHERE StudentID=?", ((StudentID.get(),Firstname.get(),Midname.get(),Surname.get(),CourseCode.get(),Yearlevel.get(),Gender.get(),\
                           tree.set(selected, '#1'))))
                 conn.commit()
-                tkinter.messagebox.showinfo("SSIS", "Student Information is Updated")
+                tkinter.messagebox.showinfo("Student Information System", "Student Information is Updated")
                 displayData()
                 conn.close()
         
         def deleteData():   
             try:
-                messageDelete = tkinter.messagebox.askyesno("SSIS", "Do you want to delete this record?")
+                messageDelete = tkinter.messagebox.askyesno("Student Information System", "Do you want to delete this record?")
                 if messageDelete > 0:   
-                    con = sqlite3.connect("StudentDatabase.db")
+                    con = sqlite3.connect("Student.db")
                     cur = con.cursor()
                     x = tree.selection()[0]
                     id_no = tree.item(x)["values"][0]
-                    cur.execute("DELETE FROM studentdatabase WHERE StudentID = ?",(id_no,))                   
+                    cur.execute("DELETE FROM student WHERE StudentID = ?",(id_no,))                   
                     con.commit()
                     tree.delete(x)
-                    tkinter.messagebox.showinfo("SSIS", "Student is successfully deleted")
+                    tkinter.messagebox.showinfo("Student Information System", "Student is successfully deleted")
                     displayData()
                     con.close()                    
             except Exception as e:
@@ -399,10 +401,10 @@ class Student(tk.Frame):
         def searchData():
             StudentID = Searchbar.get()
             try:  
-                con = sqlite3.connect("StudentDatabase.db")
+                con = sqlite3.connect("Student.db")
                 cur = con.cursor()
                 cur .execute("PRAGMA foreign_keys = ON")
-                cur.execute("SELECT * FROM studentdatabase WHERE StudentID = ?",(StudentID,))
+                cur.execute("SELECT * FROM student WHERE StudentID = ?",(StudentID,))
                 con.commit()
                 tree.delete(*tree.get_children())
                 rows = cur.fetchall()
@@ -410,15 +412,15 @@ class Student(tk.Frame):
                     tree.insert("", tk.END, text=row[0], values=row[0:])
                 con.close()
             except:
-                tkinter.messagebox.showerror("SSIS", "ID is invalid")
+                tkinter.messagebox.showerror("Student Information System", "ID is invalid")
             
                 
         def displayData():
             tree.delete(*tree.get_children())
-            conn = sqlite3.connect("StudentDatabase.db")
+            conn = sqlite3.connect("Student.db")
             cur = conn.cursor()
             cur.execute("PRAGMA foreign_keys = ON")
-            cur.execute("SELECT * FROM studentdatabase")
+            cur.execute("SELECT * FROM student")
             rows = cur.fetchall()
             for row in rows:
                 tree.insert("", tk.END, text=row[0], values=row[0:])
@@ -434,7 +436,7 @@ class Student(tk.Frame):
             Firstname.set(values[1])
             Midname.set(values[2])
             Surname.set(values[3])
-            Course_Code.set(values[4])
+            CourseCode.set(values[4])
             Yearlevel.set(values[5])
             Gender.set(values[6])
             
@@ -446,9 +448,17 @@ class Student(tk.Frame):
             Firstname.set('')
             Midname.set('')
             Surname.set('')
-            Course_Code.set('')
+            CourseCode.set('')
             Yearlevel.set('')
             Gender.set('')
+
+        con = sqlite3.connect("Student.db")
+        cur = con.cursor()
+        cur.execute("SELECT * FROM courses")
+        books = cur.fetchall()
+        bookid = []
+        for book in books:
+             bookid.append(book[0])
 
         ManageFrame=Frame(self, relief =RIDGE, bg="#4A6274")
         ManageFrame.place(x=30, y=130,width=530, height=500)
@@ -482,7 +492,9 @@ class Student(tk.Frame):
 
         self.Course = Label(ManageFrame, font=("Palatino Linotype",14,"bold"), fg="snow", bg="#4A6274",text="COURSE:", padx=5, pady=5)
         self.Course.place(x=20,y=190)
-        self.CourseEntry = Entry(ManageFrame, font=("Poppins", 13), textvariable=Course_Code, width=35)
+        self.CourseEntry =ttk.Combobox(ManageFrame,
+                                                value=bookid,
+                                                state="readonly", font=("Poppins", 13), textvariable=CourseCode, width=33)
         self.CourseEntry.place(x=200,y=196)
         
 
@@ -577,7 +589,7 @@ class Student(tk.Frame):
         connect()
         displayData()
 
-ssis = SIS()
+ssis = SSIS()
 ssis.geometry("1355x650+0+0")
 ssis.resizable(False,False)
 ssis.mainloop()
